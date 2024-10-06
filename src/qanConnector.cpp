@@ -138,6 +138,9 @@ void    Connector::connectorReleased(QQuickItem* target) noexcept
         } else
             emit requestEdgeCreation(srcNode, dstNode,
                                      srcPortItem, dstPortItem);
+            if(srcPortItem!=nullptr && dstPortItem!=nullptr){
+                emit requestPortEdgeCreation(srcPortItem, dstPortItem);
+            }
     }
     if (createdEdge) // Notify user of the edge creation
         emit edgeInserted(createdEdge);

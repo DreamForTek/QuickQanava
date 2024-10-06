@@ -117,6 +117,7 @@ public:
 signals:
     //! \copydoc getGraphView()
     void                    graphViewChanged();
+     void                   rightClicked(QPointF pos);
 private:
     //! \copydoc getGraphView()
     qan::GraphView*         _graphView = nullptr;
@@ -190,6 +191,9 @@ signals:
                                                      qan::PortItem* srcPortItem, qan::PortItem* dstPortItem);
     //! \copydoc hlg::Connector::edgeInserted
     void                connectorEdgeInserted(qan::Edge* edge);
+
+    void                connectorRequestPortEdgeCreation(qan::PortItem* src, qan::PortItem* dst);
+
 
 public:
     //! Alias to VisualConnector::edgeColor property (default to Black).
@@ -498,7 +502,7 @@ public:
     Q_INVOKABLE void        bindEdgeDestination(qan::Edge* edge, qan::PortItem* inPort) noexcept;
 
     //! Shortcut to bindEdgeSource() and bindEdgeDestination() for edge on \c outPort and \c inPort.
-    Q_INVOKABLE void        bindEdge(qan::Edge* edge, qan::PortItem* outPort, qan::PortItem* inPort) noexcept;
+    Q_INVOKABLE virtual void        bindEdge(qan::Edge* edge, qan::PortItem* outPort, qan::PortItem* inPort) noexcept;
 
     /*! \brief Test if an edge source is actually bindable to a given port.
      *
@@ -799,6 +803,9 @@ public:
     //! Return true if multiple nodes, groups or edges are selected.
     Q_INVOKABLE bool    hasMultipleSelection() const;
 
+
+     Q_PROPERTY(qan::Node* selectedNode READ selectedNode WRITE setSelectedNode NOTIFY selectedNodeChanged)
+
 public:
     using SelectedNodes = qcm::Container<std::vector, QPointer<qan::Node>>;
 
@@ -814,6 +821,7 @@ signals:
     void                selectedNodesChanged();
     //! Emitted whenever nodes/groups/edge selection change.
     void                selectionChanged();
+    void selectedNodeChanged(qan::Node* selectedNode);
 
 public:
     using SelectedGroups = qcm::Container<std::vector, QPointer<qan::Group>>;
@@ -826,6 +834,10 @@ public:
     inline auto         getSelectedGroups() const -> const SelectedGroups& { return _selectedGroups; }
 private:
     SelectedGroups      _selectedGroups;
+
+protected:
+    virtual void        mousePressEvent(QMouseEvent* event ) override;
+
 signals:
     void                selectedGroupsChanged();
 
@@ -1097,6 +1109,7 @@ private:
                           std::unordered_set<const qan::Node*>& marks,
                           std::vector<const qan::Node*>& childs,
                           bool collectGroup) const noexcept;
+    qan::Node* m_selectedNode=0;
 
 public:
     //! Return a set of all edges strongly connected to a set of nodes (ie where source AND destination is in \c nodes).
@@ -1151,6 +1164,9 @@ public:
      * node of \c candidate at any degree).
      */
     bool                    isAncestor(const qan::Node& node, const qan::Node& candidate) const noexcept;
+
+public slots:
+    void setSelectedNode(qan::Node* selectedNode);
 
 public:
     /*! Collect all nodes and groups contained in given groups.
