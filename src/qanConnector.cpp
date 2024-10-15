@@ -135,13 +135,17 @@ void    Connector::connectorReleased(QQuickItem* target) noexcept
                 if (dstPortItem != nullptr)
                     _graph->bindEdgeDestination(*createdEdge, *dstPortItem);   // Bind created edge to a destination port
             }
-        } else
+        } else{
+
+        
             emit requestEdgeCreation(srcNode, dstNode,
                                      srcPortItem, dstPortItem);
+
             if(srcPortItem!=nullptr && dstPortItem!=nullptr){
                 emit requestPortEdgeCreation(srcPortItem, dstPortItem);
             }
     }
+        }
     if (createdEdge) // Notify user of the edge creation
         emit edgeInserted(createdEdge);
 }

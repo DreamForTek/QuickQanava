@@ -100,7 +100,6 @@ void    PortItem::addInEdgeItem(qan::EdgeItem& inEdgeItem) noexcept
     QObject::connect(&inEdgeItem,   &QObject::destroyed,
                      this,          &qan::PortItem::onEdgeItemDestroyed);
     _inEdgeItems.append(&inEdgeItem);
-     emit inEdgeAdded(inEdgeItem);
 }
 
 void    PortItem::addOutEdgeItem(qan::EdgeItem& outEdgeItem) noexcept
@@ -108,7 +107,6 @@ void    PortItem::addOutEdgeItem(qan::EdgeItem& outEdgeItem) noexcept
     QObject::connect(&outEdgeItem,  &QObject::destroyed,
                      this,          &qan::PortItem::onEdgeItemDestroyed);
     _outEdgeItems.append(&outEdgeItem);
-    emit outEdgeAdded(outEdgeItem);
 }
 
 void    PortItem::onEdgeItemDestroyed(QObject* obj)
@@ -130,20 +128,6 @@ void    PortItem::updateEdges()
         if (outEdgeItem != nullptr)
             outEdgeItem->updateItem();
 }
-
-double PortItem::yPosition() const
-{
-    return m_yPosition;
-}
-
-void PortItem::setYPosition(double newYPosition)
-{
-    if (qFuzzyCompare(m_yPosition, newYPosition))
-        return;
-    m_yPosition = newYPosition;
-    emit yPositionChanged();
-}
-
 //-----------------------------------------------------------------------------
 
 } // ::qan

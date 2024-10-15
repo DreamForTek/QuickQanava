@@ -59,9 +59,6 @@ class PortItem : public qan::NodeItem
     /*! \name Dock Object Management *///--------------------------------------
     //@{
     Q_OBJECT
-
-    Q_PROPERTY(double yPosition READ yPosition WRITE setYPosition NOTIFY yPositionChanged)
-
     QML_ELEMENT
 public:
     //! PortItem constructor.
@@ -120,9 +117,6 @@ private:
     Multiplicity        _multiplicity{Multiplicity::Multiple};
 signals:
     void                multiplicityChanged();
-    void outEdgeAdded(qan::EdgeItem& outEdgeItem);
-    void inEdgeAdded(qan::EdgeItem& inEdgeItem);
-
 
 public:
     //!
@@ -136,8 +130,6 @@ signals:
 
 public:
     Q_PROPERTY(QString label READ getLabel WRITE setLabel NOTIFY labelChanged FINAL)
-    Q_PROPERTY( QString id READ getId NOTIFY idChanged FINAL )
-
     void            setLabel( const QString& label ) noexcept;
     inline QString  getLabel() const noexcept { return _label; }
 private:
@@ -145,17 +137,11 @@ private:
 signals:
     void            labelChanged();
 
-    void yPositionChanged();
-
-    void idChanged();
-
 public:
     void            setId(const QString& id) noexcept { _id = id; }
     const QString&  getId() const noexcept { return _id; }
 private:
     QString         _id = "";
-
-    double m_yPosition;
 
 public:
     using EdgeItems =   qcm::Container<QVector, qan::EdgeItem*>;
@@ -181,8 +167,6 @@ public:
     Q_INVOKABLE virtual void updateEdges();
     //@}
     //-------------------------------------------------------------------------
-    double yPosition() const;
-    void setYPosition(double newYPosition);
 };
 
 } // ::qan

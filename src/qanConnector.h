@@ -81,6 +81,7 @@ protected:
     QPointer<qan::Graph>    _graph;
 signals:
     void    graphChanged();
+     void    requestPortEdgeCreation(qan::PortItem* src, qan::PortItem* dst);
     //@}
     //-------------------------------------------------------------------------
 
@@ -100,7 +101,6 @@ signals:
                                 qan::PortItem* srcPortItem, qan::PortItem* dstPortItem);
     //! Emitted after an edge has been created to allow user configuration (not Emitted when \c createDefaultEdge is set to false).
     void    edgeInserted(qan::Edge* edge);
-    void    requestPortEdgeCreation(qan::PortItem* src, qan::PortItem* dst);
 
 protected:
     //! Should be called from QML when connector draggable item is released other a target.
